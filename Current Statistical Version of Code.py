@@ -64,19 +64,19 @@ def game_win(player_hand_sum, dealer_hand_sum):
 def main():
     
     # this is the list of all possible starter hand combinations (2 cards)
-    initial_hand_combos = [[2,2],[2,3],[2,4],[3,3],[2,5],[3,4],[2,6],[3,5],[4,4],[2,7],[3,6],[4,5],[2,8],[3,7],[4,6],[5,5],[2,9],[3,8],[4,7],[5,6],[2,10],[3,9],[4,8],[5,7],[6,6],[11,11],[3,10],[4,9],[5,8],[6,7],[11,2],[4,10],[5,9],[6,8],[7,7],[11,3],[5,10],[6,9],[7,8],[11,4],[6,10],[7,9],[8,8],[11,5],[7,10],[8,9],[11,6],[8,10],[9,9],[11,7],[9,10],[11,8],[10,10],[11,9],[10,11]]
+    initial_hand_combos = [[2,2],[2,3],[2,4],[3,3],[2,5],[3,4],[2,6],[3,5],[4,4],[2,7],[3,6],[4,5],[2,8],[3,7],[4,6],[5,5],[2,9],[3,8],[4,7],[5,6],[2,10],[2,10],[2,10],[2,10],[3,9],[4,8],[5,7],[6,6],[11,11],[3,10],[3,10],[3,10],[3,10],[4,9],[5,8],[6,7],[11,2],[4,10],[4,10],[4,10],[4,10],[5,9],[6,8],[7,7],[11,3],[5,10],[5,10],[5,10],[5,10],[6,9],[7,8],[11,4],[6,10],[6,10],[6,10],[6,10],[7,9],[8,8],[11,5],[7,10],[7,10],[7,10],[7,10],[8,9],[11,6],[8,10],[8,10],[8,10],[8,10],[9,9],[11,7],[9,10],[9,10],[9,10],[9,10],[11,8],[10,10],[10,10],[10,10],[10,10],[10,10],[10,10],[10,10],[10,10],[10,10],[10,10],[11,9],[10,11],[10,11],[10,11],[10,11]]
     
     # the player will hit either 0, 1, or 2 times
     num_hits = [0,1,2]
     
     # number of simulations to run for each case
-    N = 500
+    N = 50000
     
     # for 55 initial hand combos and 0, 1, or 2 hits for each hand, there are 165 cases to examine (55x3)
     # the results list is a list of 165 lists (one for each case)
     # each inidividual list will be of the following format: [initial hand sum, number of hits, fraction of player wins for X simulations]
     # this information will be appended below in the for loops
-    results = [[] for x in range(165)]
+    results = [[] for x in range(273)]
     
     blackjack_list_0 = []
     blackjack_list_1 = []
@@ -202,10 +202,7 @@ def main():
     blackjack_final_1 = statistics.mean(blackjack_list_1)
     blackjack_final_2 = statistics.mean(blackjack_list_2)
     
-    print('0:',blackjack_final_0)
-    print('1:',blackjack_final_1)
-    print('2:',blackjack_final_2)
-    #print(results)
+
     
     # create plots of initial hand sum verus fraction of player wins for 0, 1, or 2 hits (three total plots)
     
@@ -402,7 +399,7 @@ def main():
     fraction10 = [statistics.mean(list10[i]) for i in range(0,3)]
     fraction11 = [statistics.mean(list11[i]) for i in range(0,3)]
     
-    
+    '''
     # have to take into account that when there is an inital '10' card in the hand, that could be a 10, J, Q, or K
     # the sum with the 10 should be the first value in each list
     fraction12 = [statistics.mean(4*[list12[i][0]]+list12[i][1:]) for i in range(0,3)]
@@ -417,6 +414,19 @@ def main():
     fraction20 = [statistics.mean(10*[list20[i][0]]+list20[i][1:]) for i in range(0,3)]
     
     fraction21 = [statistics.mean(4*[list21[i][0]]) for i in range(0,3)]
+    '''
+    #just added
+    fraction12 = [statistics.mean(list12[i]) for i in range(0,3)]
+    fraction13 = [statistics.mean(list13[i]) for i in range(0,3)]
+    fraction14 = [statistics.mean(list14[i]) for i in range(0,3)]
+    fraction15 = [statistics.mean(list15[i]) for i in range(0,3)]
+    fraction16 = [statistics.mean(list16[i]) for i in range(0,3)]
+    fraction17 = [statistics.mean(list17[i]) for i in range(0,3)]
+    fraction18 = [statistics.mean(list18[i]) for i in range(0,3)]
+    fraction19 = [statistics.mean(list19[i]) for i in range(0,3)]
+    fraction20 = [statistics.mean(list20[i]) for i in range(0,3)]
+    fraction21 = [statistics.mean(list21[i]) for i in range(0,3)]
+    
     
     fraction_0hits = [fraction4[0],fraction5[0],fraction6[0],fraction7[0],fraction8[0],fraction9[0],fraction10[0],fraction11[0],fraction12[0],fraction13[0],fraction14[0],fraction15[0],fraction16[0],fraction17[0],fraction18[0],fraction19[0],fraction20[0],fraction21[0]]
     fraction_1hits = [fraction4[1],fraction5[1],fraction6[1],fraction7[1],fraction8[1],fraction9[1],fraction10[1],fraction11[1],fraction12[1],fraction13[1],fraction14[1],fraction15[1],fraction16[1],fraction17[1],fraction18[1],fraction19[1],fraction20[1],fraction21[1]]
