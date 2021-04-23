@@ -1,6 +1,8 @@
 import random
 import matplotlib.pyplot as plt
 import statistics
+import numpy as np
+from astropy.table import QTable, Table, Column
 
 # function where the dealer hits until their sum is greater than or equal to 17
 def dealer(hand, deck):
@@ -67,11 +69,18 @@ def main():
     # the player will hit either 0, 1, or 2 times
     num_hits = [0,1,2]
     
+    # number of simulations to run for each case
+    N = 500
+    
     # for 55 initial hand combos and 0, 1, or 2 hits for each hand, there are 165 cases to examine (55x3)
     # the results list is a list of 165 lists (one for each case)
     # each inidividual list will be of the following format: [initial hand sum, number of hits, fraction of player wins for X simulations]
     # this information will be appended below in the for loops
     results = [[] for x in range(165)]
+    
+    blackjack_list_0 = []
+    blackjack_list_1 = []
+    blackjack_list_2 = []
     
     
     # count is used to keep track of the specific list in the results list that information should be appended to
@@ -87,13 +96,16 @@ def main():
         for j in range(len(num_hits)):
             # initialize an empty list that we will append 0's (player loses) or 1's (player wins) to
             num_wins = []
+            
+            blackjack = []
             # first append the initial hand sum to the specific list in the results list
             results[count].append(sum(initial_hand_combos[i]))
             # then append the total number of hits to the specific list in the results list
             results[count].append(num_hits[j])
             
-            # for each initial hand and for each possible number of hits, run 100 simulations to determine the probability that the player beats the dealer
-            for k in range(101):
+            
+            # for each initial hand and for each possible number of hits, run 50,000 simulations to determine the probability that the player beats the dealer
+            for k in range(N+1):
                 # initialize the deck of 52 cards for each simulation
                 deck = [2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,6,7,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,11,11,11,11]
                 
@@ -107,6 +119,12 @@ def main():
                 card2 = random.choice(deck)
                 deck.remove(card2)
                 dealer_initial_hand.append(card2)
+                
+                dealer_initial_sum = sum(dealer_initial_hand)
+                if dealer_initial_sum == 21:
+                    blackjack.append('1')
+                
+                
                 
                 # first assign the player's current hand to one of the possible starter hands
                 player_hand = initial_hand_combos[i].copy()
@@ -151,6 +169,8 @@ def main():
                     # sum the player's hand to find the player's final hand sum
                     player_final_hand_sum = sum(player_hand_updated)
                     
+                        
+                    
     
                 # now that the player has hit either 0, 1, or 2 times, call the dealer function so the dealer can continue to
                 # hit until their sum is greater than or equal to 17
@@ -165,8 +185,27 @@ def main():
             
             # append the fraction of player wins to the specific list in the results list
             results[count].append((sum(num_wins))/(len(num_wins)))
+            
+            print(len(blackjack))
+            print(blackjack)
+            if num_hits[j] == 0:
+                blackjack_list_0.append((len(blackjack)/N))
+            elif num_hits[j] == 1:
+                blackjack_list_1.append((len(blackjack)/N))
+            elif num_hits[j] == 2:
+                blackjack_list_2.append((len(blackjack)/N))
+                
+            
             count += 1
-    print(results)
+    
+    blackjack_final_0 = statistics.mean(blackjack_list_0)
+    blackjack_final_1 = statistics.mean(blackjack_list_1)
+    blackjack_final_2 = statistics.mean(blackjack_list_2)
+    
+    print('0:',blackjack_final_0)
+    print('1:',blackjack_final_1)
+    print('2:',blackjack_final_2)
+    #print(results)
     
     # create plots of initial hand sum verus fraction of player wins for 0, 1, or 2 hits (three total plots)
     
@@ -189,6 +228,7 @@ def main():
         # in this case, the initial hand sum is appended to the results list as 22, but it is actually evaluated as a 12 by the eval_ace
         # function since a hand of only 2 aces would have to be evaluated as an 11 and a 1 to avoid busting
         if results[i][0] == 22:
+            print('here')
             results[i][0] = 12
             
         # this condition is met if the number of hits = 0 (hits are in the index = 1 spot of each list in the results list) 
@@ -211,7 +251,7 @@ def main():
             x_2.append(results[i][0])
             # append the fraction of player wins (in the index = 2 position of each list) to the y-values list
             y_2.append(results[i][2])
-    
+    '''
     # plot for number of hits = 0
     plt.figure()
     plt.scatter(x_0,y_0)
@@ -237,9 +277,8 @@ def main():
     plt.grid()
     
     plt.show()
- 
+    '''
     # make a table to display the results
-    from astropy.table import QTable, Table, Column
 
     # create a list of possible initial hand sum values (integers 4-21)    
     initial_hand_sum_values = []
@@ -350,8 +389,9 @@ def main():
                 list21[0].append(y_0_sorted[i])
                 list21[1].append(y_1_sorted[i])
                 list21[2].append(y_2_sorted[i])
-
-
+    print("list12:",list12)
+    print("list13:",list13)
+    print("list14:",list14)
     # for initial sums of 4-11, just take the average of all results
     fraction4 = [statistics.mean(list4[i]) for i in range(0,3)]
     fraction5 = [statistics.mean(list5[i]) for i in range(0,3)]
@@ -388,6 +428,44 @@ def main():
 
     table_results = Table([initial_hand_sum_values,fraction_0hits,fraction_1hits,fraction_2hits],names=('Initial Hand Sum','0 Hits', '1 Hit', '2 Hit'))
     #table_results = Table([x_0,y_0,y_1,y_2],names=('Initial Hand Sum','0 Hits', '1 Hit', '2 Hit'))
-    print(table_results)
+    #print(table_results)
     table_results.show_in_browser()
+    
+    xticks_list = []
+    for i in range(0,22):
+        xticks_list.append(i)
+    
+    
+    # plot for number of hits = 0
+    plt.figure()
+    plt.scatter(initial_hand_sum_values,fraction_0hits)
+    plt.xlabel('Initial Hand Sum of Player')
+    plt.ylabel('Fraction of Player Wins')
+    plt.title('Fraction of Wins vs Initial Hand Sum of Player (0 Hits)')
+    plt.xticks(initial_hand_sum_values)
+    plt.grid()
+    plt.savefig('0 hits',dpi=600)
+    
+    # plot for number of hits = 1
+    plt.figure()
+    plt.scatter(initial_hand_sum_values,fraction_1hits)
+    plt.xlabel('Initial Hand Sum of Player')
+    plt.ylabel('Fraction of Player Wins')
+    plt.title('Fraction of Wins vs Initial Hand Sum of Player (1 Hit)')
+    plt.xticks(initial_hand_sum_values)
+    plt.grid()
+    plt.savefig('1 hits',dpi=600)
+    
+    # plot for number of hits = 2
+    plt.figure()
+    plt.scatter(initial_hand_sum_values,fraction_2hits)
+    plt.xlabel('Initial Hand Sum of Player')
+    plt.ylabel('Fraction of Player Wins')
+    plt.title('Fraction of Wins vs Initial Hand Sum of Player (2 Hits)')
+    plt.xticks(initial_hand_sum_values)
+    plt.grid()
+    plt.savefig('2 hits',dpi=600)
+    
+    plt.show()
+    
 main()
