@@ -241,7 +241,11 @@ def game(balance):
 
     # Dealing initial hands
     player_hand = deal(deck)
+    if hand_total(player_hand) == 21:
+        print("You got a natural Blackjack!")
     dealer_hand = deal(deck)
+    if hand_total(dealer_hand) == 21:
+        print("Dealer got a natural Blackjack...")
 
     # Allows the player to make moves until they or the dealer wins (or if the 
     # player decides to stand or double down)
@@ -273,16 +277,16 @@ def game(balance):
         print("The dealer has a " + str(dealer_hand) + " for a total of " + str(hand_total(dealer_hand)))
         print("You have a " + str(player_hand) + " for a total of " + str(hand_total(player_hand)))
         if hand_total(player_hand) == 21:
-            print("You got a natural Blackjack!")
-        print("You win $" + str(bet) + "!")
+            bet *= 1.5
+            print("You win $" + str(bet) + "!")
+        else:
+            print("You win $" + str(bet) + "!")
         balance += bet
 
     # the case if the dealer wins the game/round (the player's bet is deducted from their balance)
     else:
         print("The dealer has a " + str(dealer_hand) + " for a total of " + str(hand_total(dealer_hand)))
         print("You have a " + str(player_hand) + " for a total of " + str(hand_total(player_hand)))
-        if hand_total(dealer_hand) == 21:
-            print("Dealer got a natural Blackjack...")
         print("You lost $" + str(bet) + "!")
         balance -= bet
 
