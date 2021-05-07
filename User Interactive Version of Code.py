@@ -11,12 +11,12 @@ def deal(deck):
 
     Parameters
     ----------
-    deck : 
+    deck :
         The deck in use
 
     Returns
     -------
-    hand : 
+    hand :
         The player's (or dealer's) hand
 
     """
@@ -36,14 +36,14 @@ def hit(hand, deck):
 
     Parameters
     ----------
-    hand : 
+    hand :
         The player's (or dealer's) hand
-    deck : 
+    deck :
         The deck in use
 
     Returns
     -------
-    hand : 
+    hand :
         Updated player's (or dealer's) hand
 
     """
@@ -59,17 +59,17 @@ def double_down(hand, deck, bet):
 
     Parameters
     ----------
-    hand : 
+    hand :
         The player's hand
         The deck in use
-    bet : 
+    bet :
         The player's original bet
 
     Returns
     -------
-    hand : 
+    hand :
         The player's updated hand
-    bet : 
+    bet :
         The player's updated bet
     deck:
         Passed player's deck
@@ -86,12 +86,12 @@ def hand_total(hand):
 
     Parameters
     ----------
-    hand : 
+    hand :
         The player's (or dealer's) hand
 
     Returns
     -------
-    hand_total : 
+    hand_total :
         The sum of the hand passed
 
     """
@@ -120,12 +120,12 @@ def choose(hand):
 
     Parameters
     ----------
-    hand : 
+    hand :
         The player's hand
 
     Returns
     -------
-    choice : 
+    choice :
         The player's choice
 
     """
@@ -138,7 +138,7 @@ def choose(hand):
         can_double_down = True
     inputString += ": "
 
-    # Asks player what move they want to make 
+    # Asks player what move they want to make
 
     # Includes double down move if applicable
     if can_double_down:
@@ -163,12 +163,12 @@ def set_bet(balance):
 
     Parameters
     ----------
-    balance : 
+    balance :
         The player's current balance
 
     Returns
     -------
-    bet : 
+    bet :
         The player's bet
 
     """
@@ -196,9 +196,9 @@ def game_win(player_hand_sum, dealer_hand_sum):
 
     Parameters
     ----------
-    player_hand_sum : 
+    player_hand_sum :
         The sum of the player's hand
-    dealer_hand_sum : 
+    dealer_hand_sum :
         The sum of the dealers' hand
 
     Returns
@@ -223,12 +223,12 @@ def game(balance):
 
     Parameters
     ----------
-    balance : 
+    balance :
         The player's balance at the start of the game
 
     Returns
     -------
-    balance : 
+    balance :
         The player's balance after the game
 
     """
@@ -242,16 +242,16 @@ def game(balance):
     # Dealing initial hands
     player_hand = deal(deck)
     if hand_total(player_hand) == 21:
-        print("You got a natural Blackjack!")
+        print("\nYou got a natural Blackjack!")
     dealer_hand = deal(deck)
     if hand_total(dealer_hand) == 21:
-        print("Dealer got a natural Blackjack...")
+        print("\nDealer got a natural Blackjack...")
 
-    # Allows the player to make moves until they or the dealer wins (or if the 
+    # Allows the player to make moves until they or the dealer wins (or if the
     # player decides to stand or double down)
     while (hand_total(player_hand) < 21 and hand_total(
             dealer_hand) < 21) and player_choice != "s" and player_choice != "d":
-        print("The dealer is showing a " + str(dealer_hand[0]))
+        print("\nThe dealer is showing a " + str(dealer_hand[0]))
         print("You have a " + str(player_hand) + " for a total of " + str(hand_total(player_hand)))
         player_choice = choose(player_hand)
 
@@ -274,7 +274,7 @@ def game(balance):
 
     # The case if the player wins the game/round (their bet is added to their balance)
     if game_win(hand_total(player_hand), hand_total(dealer_hand)):
-        print("The dealer has a " + str(dealer_hand) + " for a total of " + str(hand_total(dealer_hand)))
+        print("\nThe dealer has a " + str(dealer_hand) + " for a total of " + str(hand_total(dealer_hand)))
         print("You have a " + str(player_hand) + " for a total of " + str(hand_total(player_hand)))
         if hand_total(player_hand) == 21:
             bet *= 1.5
@@ -285,7 +285,7 @@ def game(balance):
 
     # the case if the dealer wins the game/round (the player's bet is deducted from their balance)
     else:
-        print("The dealer has a " + str(dealer_hand) + " for a total of " + str(hand_total(dealer_hand)))
+        print("\nThe dealer has a " + str(dealer_hand) + " for a total of " + str(hand_total(dealer_hand)))
         print("You have a " + str(player_hand) + " for a total of " + str(hand_total(player_hand)))
         print("You lost $" + str(bet) + "!")
         balance -= bet
@@ -312,7 +312,7 @@ def main():
         print("Please enter 'Y' or 'N'")
         choice = input("Welcome to Blackjack!\nWould you like to play? [Y] or [N]: ").lower()
 
-    # Player plays new games/rounds if they decide to play and if they can enough 
+    # Player plays new games/rounds if they decide to play and if they can enough
     # money in their balance
     while choice == "y" and balance > 0:
         balance = game(balance)
