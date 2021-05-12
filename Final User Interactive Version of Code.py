@@ -103,10 +103,7 @@ def hand_total(hand):
         # Adds face value of card otherwise
         else:
             hand_total += card
-            
-    if "A" in hand and hand_total > 21:
-        hand_total -= 10
-        
+       
     return hand_total
 
 
@@ -232,7 +229,7 @@ def game(balance):
         print("\nDealer got a natural Blackjack...")
 
     # Allows the player to make moves until they stand, double down, or bust
-    while hand_total(player_hand) < 21 and player_choice != "s" and player_choice != "d":
+    while hand_total(dealer_hand) and hand_total(player_hand) < 21 and player_choice != "s" and player_choice != "d":
         print("\nThe dealer is showing a " + str(dealer_hand[0]))
         print("You have a " + str(player_hand) + " for a total of " + str(hand_total(player_hand)))
         player_choice = choose(player_hand)
@@ -286,8 +283,7 @@ def main():
 
     # Input checking
     while choice.lower() not in valid_choices or choice.isnumeric() is True:
-        print("Please enter 'Y' or 'N'")
-        choice = input("Welcome to Blackjack!\nWould you like to play? [Y] or [N]: ").lower()
+        choice = input("Please enter [Y] or [N]: ").lower()
 
     # Player plays new games/rounds if they decide to play and if they can enough
     # money in their balance
