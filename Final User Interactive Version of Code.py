@@ -298,8 +298,7 @@ def main():
             choice = input("Would you like to play again? [Y] or [N]: ").lower()
 
         while choice.lower() not in valid_choices or choice.isnumeric() is True:
-            print("Please enter 'Y' or 'N'")
-            choice = input("Welcome to Blackjack!\nWould you like to play? [Y] or [N]: ").lower()
+            choice = input("Please enter [Y] or [N]: ").lower()
 
     print("You ended with a balance of $" + str(balance))
     print("\nThank you for playing Blackjack!")
